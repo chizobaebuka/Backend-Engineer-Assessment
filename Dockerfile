@@ -1,6 +1,4 @@
-FROM alpine:3.19
-
-ENV NODE_VERSION 20.13.1
+FROM node:14
 WORKDIR /src
 COPY package*.json ./
 RUN npm install
