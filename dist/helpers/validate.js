@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const constants_1 = require("../constants");
 const validate = (schema) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield schema.parseAsync({
@@ -20,8 +21,8 @@ const validate = (schema) => (req, res, next) => __awaiter(void 0, void 0, void 
     }
     catch (error) {
         const err_message = JSON.parse(error.message);
-        res.status(400).json({
-            status: 400,
+        res.status(constants_1.HTTP_STATUS_CODE.BAD_REQUEST).json({
+            status: constants_1.HTTP_STATUS_CODE.BAD_REQUEST,
             message: err_message[0].message,
         });
     }

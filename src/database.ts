@@ -11,7 +11,7 @@ class Database {
 
     private POSTGRES_DB = process.env.DB_NAME || db_name;
     private POSTGRES_HOST = process.env.DB_HOST || db_host;
-    private POSTGRES_PORT = process.env.DB_PORT as unknown as number || db_port;
+    private POSTGRES_PORT = parseInt(process.env.DB_PORT || db_port.toString(), 10);
     private POSTGRES_USER = process.env.DB_USER || db_user;
     private POSTGRES_PASSWORD = process.env.DB_PASSWORD || db_password;
 
@@ -20,6 +20,12 @@ class Database {
     }
 
     private async connectToPostgreSQL() {
+        console.log('Attempting to connect to PostgreSQL database...');
+        console.log('Database:', this.POSTGRES_DB);
+        console.log('Host:', this.POSTGRES_HOST);
+        console.log('Port:', this.POSTGRES_PORT);
+        console.log('User:', this.POSTGRES_USER);
+        
         this.sequelize = new Sequelize({
             database: this.POSTGRES_DB,
             username: this.POSTGRES_USER,
@@ -28,11 +34,13 @@ class Database {
             port: this.POSTGRES_PORT ,
             dialect: 'postgres',
             models: [User, Package],
+            logging: console.log,
         });
 
         try {
             await this.sequelize.authenticate();
             console.log('Connection has been established successfully.');
+            await this.sequelize.sync();
             console.log('Models have been synchronized with the database.');
         } catch (error) {
             console.log('Unable to connect to the database:', error);

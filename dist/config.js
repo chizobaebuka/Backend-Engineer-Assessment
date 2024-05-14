@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.db_password = exports.db_user = exports.db_name = exports.db_port = exports.db_host = exports.port = void 0;
+exports.JWT_SECRET = exports.db_password = exports.db_user = exports.db_name = exports.db_port = exports.db_host = exports.port = void 0;
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
 exports.port = Number(process.env.API_PORT);
@@ -32,4 +32,5 @@ exports.db_port = Number(process.env.DB_PORT);
 exports.db_name = String(process.env.DB_NAME);
 exports.db_user = String(process.env.DB_USER);
 exports.db_password = String(process.env.DB_PASSWORD);
+exports.JWT_SECRET = String(process.env.JWT_SECRET);
 //# sourceMappingURL=config.js.map

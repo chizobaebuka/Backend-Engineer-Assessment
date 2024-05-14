@@ -32,35 +32,51 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const sequelize_1 = require("sequelize");
+const sequelize_typescript_1 = require("sequelize-typescript");
 const config_1 = require("./config");
 const dotenv = __importStar(require("dotenv"));
+const user_1 = require("./models/user");
+const package_1 = require("./models/package");
 dotenv.config();
 class Database {
     constructor() {
-        this.POSTGRES_DB = process.env.POSTGRES_DB || config_1.db_name;
-        this.POSTGRES_HOST = process.env.POSTGRES_HOST || config_1.db_host;
-        this.POSTGRES_PORT = process.env.POSTGRES_PORT || config_1.db_port;
-        this.POSTGRES_USER = process.env.POSTGRES_USER || config_1.db_user;
-        this.POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD || config_1.db_password;
+        this.POSTGRES_DB = process.env.DB_NAME || config_1.db_name;
+        this.POSTGRES_HOST = process.env.DB_HOST || config_1.db_host;
+        this.POSTGRES_PORT = process.env.DB_PORT || config_1.db_port;
+        this.POSTGRES_USER = process.env.DB_USER || config_1.db_user;
+        this.POSTGRES_PASSWORD = process.env.DB_PASSWORD || config_1.db_password;
         this.connectToPostgreSQL();
     }
     connectToPostgreSQL() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.sequelize = new sequelize_1.Sequelize({
+            this.sequelize = new sequelize_typescript_1.Sequelize({
                 database: this.POSTGRES_DB,
                 username: this.POSTGRES_USER,
                 password: this.POSTGRES_PASSWORD,
                 host: this.POSTGRES_HOST,
                 port: this.POSTGRES_PORT,
                 dialect: 'postgres',
+                models: [user_1.User, package_1.Package],
             });
             try {
                 yield this.sequelize.authenticate();
                 console.log('Connection has been established successfully.');
+                console.log('Models have been synchronized with the database.');
             }
             catch (error) {
-                console.error('Unable to connect to the database:', error);
+                console.log('Unable to connect to the database:', error);
+            }
+        });
+    }
+    closeConnection() {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            try {
+                yield ((_a = this.sequelize) === null || _a === void 0 ? void 0 : _a.close());
+            }
+            catch (error) {
+                console.error("Error closing database connection:", error);
+                throw new Error("Failed to close database connection");
             }
         });
     }
