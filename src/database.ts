@@ -20,12 +20,6 @@ class Database {
     }
 
     private async connectToPostgreSQL() {
-        console.log('Attempting to connect to PostgreSQL database...');
-        console.log('Database:', this.POSTGRES_DB);
-        console.log('Host:', this.POSTGRES_HOST);
-        console.log('Port:', this.POSTGRES_PORT);
-        console.log('User:', this.POSTGRES_USER);
-        
         this.sequelize = new Sequelize({
             database: this.POSTGRES_DB,
             username: this.POSTGRES_USER,
