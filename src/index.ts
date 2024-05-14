@@ -36,5 +36,5 @@ const port: number = process.env.API_PORT ? parseInt(process.env.API_PORT) : 300
 const app = new App().app;
 
 app.listen(port, () => {
-  console.log("✅ Server started successfully!");
+  console.log(`✅ Server started successfully!, running on port: ${port}`);
 });
