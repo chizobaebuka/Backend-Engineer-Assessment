@@ -1,4 +1,5 @@
 "use strict";
+// import * as dotenv from 'dotenv';
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -23,14 +24,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JWT_SECRET = exports.db_password = exports.db_user = exports.db_name = exports.db_port = exports.db_host = exports.port = void 0;
+exports.API_PORT = exports.JWT_SECRET = exports.db_password = exports.db_user = exports.db_name = exports.db_port = exports.db_host = void 0;
+// dotenv.config()
+// export const port = Number(process.env.API_PORT);
+// export const db_host = String(process.env.DB_HOST);
+// export const db_port = Number(process.env.DB_PORT);
+// export const db_name = String(process.env.DB_NAME);
+// export const db_user = String(process.env.DB_USER);
+// export const db_password = String(process.env.DB_PASSWORD);
+// export const JWT_SECRET = String(process.env.JWT_SECRET);
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-exports.port = Number(process.env.API_PORT);
-exports.db_host = String(process.env.DB_HOST);
-exports.db_port = Number(process.env.DB_PORT);
-exports.db_name = String(process.env.DB_NAME);
-exports.db_user = String(process.env.DB_USER);
-exports.db_password = String(process.env.DB_PASSWORD);
+exports.db_host = process.env.DB_HOST;
+exports.db_port = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432;
+exports.db_name = process.env.DB_NAME;
+exports.db_user = process.env.DB_USER;
+exports.db_password = process.env.DB_PASSWORD;
 exports.JWT_SECRET = String(process.env.JWT_SECRET);
+exports.API_PORT = process.env.API_PORT ? parseInt(process.env.API_PORT, 10) : 3000;
 //# sourceMappingURL=config.js.map

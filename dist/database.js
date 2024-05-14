@@ -42,13 +42,18 @@ class Database {
     constructor() {
         this.POSTGRES_DB = process.env.DB_NAME || config_1.db_name;
         this.POSTGRES_HOST = process.env.DB_HOST || config_1.db_host;
-        this.POSTGRES_PORT = process.env.DB_PORT || config_1.db_port;
+        this.POSTGRES_PORT = parseInt(process.env.DB_PORT || config_1.db_port.toString(), 10);
         this.POSTGRES_USER = process.env.DB_USER || config_1.db_user;
         this.POSTGRES_PASSWORD = process.env.DB_PASSWORD || config_1.db_password;
         this.connectToPostgreSQL();
     }
     connectToPostgreSQL() {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('Attempting to connect to PostgreSQL database...');
+            console.log('Database:', this.POSTGRES_DB);
+            console.log('Host:', this.POSTGRES_HOST);
+            console.log('Port:', this.POSTGRES_PORT);
+            console.log('User:', this.POSTGRES_USER);
             this.sequelize = new sequelize_typescript_1.Sequelize({
                 database: this.POSTGRES_DB,
                 username: this.POSTGRES_USER,
@@ -57,10 +62,12 @@ class Database {
                 port: this.POSTGRES_PORT,
                 dialect: 'postgres',
                 models: [user_1.User, package_1.Package],
+                logging: console.log,
             });
             try {
                 yield this.sequelize.authenticate();
                 console.log('Connection has been established successfully.');
+                yield this.sequelize.sync();
                 console.log('Models have been synchronized with the database.');
             }
             catch (error) {
