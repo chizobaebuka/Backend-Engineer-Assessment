@@ -129,8 +129,8 @@ class PackageController {
             }
             
             cron.schedule('*/2 * * * *', async () => {
-               await new NewPackageRepo().updatePackageStatus(packageId);
-            });
+                await new NewPackageRepo().updatePackageStatus(packageId);
+            });              
 
             return res.status(HTTP_STATUS_CODE.SUCCESS).json({
                 message: 'Package to update retrieved successfully and initiated the automated status update job',

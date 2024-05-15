@@ -1,7 +1,4 @@
 import { Package } from "../models/package";
-// import * as bcrypt from "bcrypt";
-// import * as jwt from "jsonwebtoken";
-// import * as db from '../config'
 import { PackageStatus } from "../interface/package.interface";
 import { Op } from "sequelize";
 
@@ -119,42 +116,49 @@ export class NewPackageRepo implements iPackageRepo {
             if (!packageToUpdate) {
                 throw new Error(`Package ${packageId} not found`);
             }
-
-            let oldStatus = packageToUpdate.status;
+    
+            const oldStatus = packageToUpdate.status;
+            let newStatus;
     
             switch (packageToUpdate.status) {
                 case PackageStatus.Delayed:
-                    packageToUpdate.status = PackageStatus.Delayed;
+                    newStatus = PackageStatus.Delayed;
                     break;
                 case PackageStatus.SentOut:
-                    packageToUpdate.status = PackageStatus.InTransit;
+                    newStatus = PackageStatus.InTransit;
                     break;
                 case PackageStatus.InTransit:
-                    packageToUpdate.status = PackageStatus.PendingDelivery;
+                    newStatus = PackageStatus.PendingDelivery;
                     break;
                 case PackageStatus.PendingDelivery:
-                    packageToUpdate.status = PackageStatus.OutForDelivery;
+                    newStatus = PackageStatus.OutForDelivery;
                     break;
                 case PackageStatus.OutForDelivery:
-                    packageToUpdate.status = PackageStatus.Delivered;
+                    newStatus = PackageStatus.Delivered;
                     break;
                 case PackageStatus.Delivered:
-                    packageToUpdate.status = PackageStatus.Closed;
+                    newStatus = PackageStatus.Closed;
                     break;
                 case PackageStatus.AvailableForPickup:
-                    packageToUpdate.status = PackageStatus.Closed;
+                    newStatus = PackageStatus.Closed;
                     break;
                 default:
+                    newStatus = oldStatus;
                     break;
             }
     
-            await packageToUpdate.save();
-    
-            console.log(`Package status updated successfully! Old status: ${oldStatus}, New status: ${packageToUpdate.status}`);
+            if (newStatus !== oldStatus) {
+                packageToUpdate.status = newStatus;
+                await packageToUpdate.save();
+                console.log(`Package status updated successfully! Old status: ${oldStatus}, New status: ${newStatus}`);
+            } else {
+                console.log(`Package status remains the same: ${oldStatus}`);
+            }
         } catch (error) {
             console.error('Error updating package status:', error);
         }
     }
+    
 
     async getPackagesToUpdate(): Promise<Package[]> {
         try {
